@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://actors/Solid.tscn" type="PackedScene" id=1]
+[ext_resource path="res://actors/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://actors/Platform.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Gen.gd" type="Script" id=4]
+[ext_resource path="res://actors/Coin.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/font.tres" type="DynamicFont" id=6]
+[ext_resource path="res://actors/Countdown.tscn" type="PackedScene" id=7]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 2592.42, 292.009 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 38.3248, 312.621 )
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Solid" parent="." instance=ExtResource( 1 )]
+position = Vector2( 5e+06, 584 )
+scale = Vector2( 1e+07, 1 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 15.0406, 550.412 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2( -28.5101, -16.1199 )
+current = true
+limit_top = 0
+limit_bottom = 0
+smoothing_enabled = true
+
+[node name="Countdown" parent="Player/Camera2D" instance=ExtResource( 7 )]
+position = Vector2( -1.04027, -532.443 )
+
+[node name="Gen" type="Area2D" parent="Player"]
+position = Vector2( 0, -258.403 )
+script = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Gen"]
+shape = SubResource( 1 )
+
+[node name="Remove" type="Area2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Remove"]
+position = Vector2( -2621.91, -237.423 )
+shape = SubResource( 3 )
+
+[node name="score" type="Label" parent="Player"]
+margin_left = 17.3102
+margin_top = -5.54883
+margin_right = 158.31
+margin_bottom = 10.4512
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.282353, 0.611765, 0.980392, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Platform" parent="." instance=ExtResource( 3 )]
+position = Vector2( 702.848, 520.989 )
+
+[node name="Coin" parent="." instance=ExtResource( 5 )]
+position = Vector2( 237.029, 514.326 )
+[connection signal="body_entered" from="Player/Gen" to="Player/Gen" method="_body_entered"]
+[connection signal="body_entered" from="Player/Remove" to="Player/Gen" method="_remove"]
